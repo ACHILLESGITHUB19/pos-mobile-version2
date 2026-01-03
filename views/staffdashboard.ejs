@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/staff.css">
+<title>Staff Dashboard</title>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="brandname">
+    <div class="logo">
+      <img src="/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <h2>G'ray Countryside Cafe Est.2018</h2>
+  </div>
+
+  <div class="logout-container">
+    <a href="/logout"><button>Logout</button></a>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div class="staffdashboard">
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h2>Categories</h2>
+
+      <button class="category-btn" data-category="Rice Bowl Meal">Rice Bowl Meal</button><br>
+      <button class="category-btn" data-category="Hot Sizzlers with Rice & Gravy">Hot Sizzlers with Rice & Gravy</button><br>
+      <button class="category-btn" data-category="Party Tray">Party Tray</button><br>
+      <button class="category-btn" data-category="Drinks">Drinks</button><br>
+      <button class="category-btn" data-category="Coffee & Tea">Coffee & Tea</button><br>
+      <button class="category-btn" data-category="Milk Tea">Milk Tea</button><br>
+      <button class="category-btn" data-category="Frappe">Frappe</button><br>
+
+      <% categories.forEach(c => { %>
+        <button class="category-btn" data-category="<%= c.name %>"><%= c.name %></button>
+      <% }) %>
+
+      <footer>&copy; 2026 For School Purposes Only. All rights reserved.</footer>
+    </div>
+
+    <!-- CENTER -->
+    <div class="center">
+      <input type="text" class="search" placeholder="Search Menu" onkeyup="searchFood(this.value)">
+
+      <div class="menu-grid">
+        <% products.forEach(p => { %>
+          <div class="food-card" data-category="<%= p.category %>">
+            <img src="<%= p.image %>" alt="<%= p.name %>">
+            <h4><%= p.name %></h4>
+            <p>₱<%= p.price.toFixed(2) %></p>
+
+            <% if (p.category === "Rice Bowl Meal" || p.category === "Hot Sizzlers with Rice & Gravy") { %>
+              <div class="stock-counter">
+                <button onclick="changeStock(this, -1)">-</button>
+                <span class="stock-number" data-stock="<%= p.stock || 0 %>"><%= p.stock || 0 %></span>
+                <button onclick="changeStock(this, 1)">+</button>
+              </div>
+            <% } %>
+
+            <button class="add-btn" data-name="<%= p.name %>" data-price="<%= p.price %>">+</button>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- CART -->
+    <div class="cart">
+      <h3>Bills</h3>
+      <ul id="cartList"></ul>
+
+      <div class="totals">
+        <p>Subtotal: ₱<span id="subtotal">0.00</span></p>
+        <p>Tax (10%): ₱<span id="tax">0.00</span></p>
+        <h3>Total Cash: ₱<span id="total">0.00</span></h3>
+        <button>Dine In</button>
+        <button>Take Out</button>
+        <button>Print Receipt</button>
+      </div>
+
+      <button class="pay-btn" onclick="charge()">Pay</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+let cart = [];
+
+// Add item to cart
+function addToCart(name, price) {
+  const item = cart.find(i => i.name === name);
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+  renderCart();
+}
+
+// Remove or decrease item from cart
+function removeItem(index) {
+  if (cart[index].qty > 1) {
+    cart[index].qty--;
+  } else {
+    cart.splice(index, 1);
+  }
+  renderCart();
+}
+
+// Render cart items
+function renderCart() {
+  const list = document.getElementById("cartList");
+  list.innerHTML = "";
+
+  let subtotal = 0;
+
+  cart.forEach((item, index) => {
+    subtotal += item.price * item.qty;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${item.name} x${item.qty}</span> <span>₱${(item.price * item.qty).toFixed(2)}</span>`;
+    li.onclick = () => removeItem(index);
+    list.appendChild(li);
+  });
+
+  const tax = subtotal * 0.10;
+  document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+  document.getElementById("tax").textContent = tax.toFixed(2);
+  document.getElementById("total").textContent = (subtotal + tax).toFixed(2);
+}
+
+// Filter menu by category
+function filterCategory(category) {
+  document.querySelectorAll(".food-card").forEach(card => {
+    card.style.display = (category === "all" || card.dataset.category === category) ? "block" : "none";
+  });
+  document.querySelector(".search").value = "";
+}
+
+// Search food items
+function searchFood(value) {
+  value = value.toLowerCase();
+  document.querySelectorAll(".food-card").forEach(card => {
+    const name = card.querySelector("h4").textContent.toLowerCase();
+    const visible = card.style.display !== "none";
+    card.style.display = name.includes(value) && visible ? "block" : "none";
+  });
+}
+
+// Change stock for menu item
+function changeStock(button, delta) {
+  const stockSpan = button.parentElement.querySelector('.stock-number');
+  let stock = parseInt(stockSpan.dataset.stock);
+  stock += delta;
+  if (stock < 0) stock = 0;
+  stockSpan.dataset.stock = stock;
+  stockSpan.textContent = stock;
+}
+
+// Checkout cart and save to server
+function charge() {
+  if (!cart.length) {
+    alert("Cart is empty!");
+    return;
+  }
+
+  const orderItems = cart.map(item => ({
+    name: item.name,
+    price: item.price,
+    qty: item.qty
+  }));
+
+  const total = parseFloat(document.getElementById("total").textContent);
+
+  fetch("/api/orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ items: orderItems, total })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Payment successful!");
+    cart = [];
+    renderCart();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Failed to save order.");
+  });
+}
+
+// Initialize buttons after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  filterCategory('all');
+
+  // Add to cart buttons
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      addToCart(btn.dataset.name, parseFloat(btn.dataset.price));
+    });
+  });
+
+  // Category filter buttons
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', () => filterCategory(btn.dataset.category));
+  });
+});
+</script>
+
+</body>
+</html>

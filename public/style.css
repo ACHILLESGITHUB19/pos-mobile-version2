@@ -1,0 +1,147 @@
+/* Box-sizing for all elements */
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    background-color: #0f4d11;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+form {
+    background-color: #14772b;
+    padding: 15px 20px;       /* smaller padding */
+    border-radius: 20px;      /* smaller radius */
+    border: 1px solid #c3e6cb;
+    box-shadow: 4px 6px 10px rgba(52, 48, 48, 0.7); /* smaller shadow */
+    width: 400px;             /* smaller width */
+    max-width: 90%;           /* responsive */
+    text-align: center;
+}
+
+/* Logo */
+form .logo-container img {
+    width: 80px;              /* smaller logo */
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 15px auto;
+    border: 2px solid whitesmoke;
+    background-color: #23a134;
+    display: block;
+}
+
+/* Brand name */
+form .gray-brandname {
+    font-size: 20px;           /* smaller font */
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style: oblique;
+}
+
+/* Inputs and selects */
+form input, form select {
+    width: 100%;
+    padding: 8px 10px;         /* smaller padding */
+    margin: 6px 0;             /* smaller margin */
+    border: 1px solid #ccc;
+    border-radius: 4px;        /* smaller radius */
+    font-size: 13px;           /* smaller font */
+}
+
+/* Button */
+form button {
+    width: 100%;
+    padding: 8px 0;            /* smaller padding */
+    margin-top: 10px;          /* smaller margin */
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;        /* smaller radius */
+    cursor: pointer;
+    font-size: 14px;           /* smaller font */
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+.message {
+    color: red;
+    margin-bottom: 6px;        /* smaller margin */
+    font-size: 12px;           /* smaller font */
+}
+
+form p {
+    margin-top: 10px;          /* smaller margin */
+    font-size: 12px;           /* smaller font */
+}
+
+form a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;           /* smaller font */
+}
+
+form a:hover {
+    text-decoration: underline;
+}
+
+h2 {
+    color: whitesmoke;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: oblique;
+    font-size: 18px;           /* smaller font */
+}
+
+/* Password wrapper */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 35px;       /* smaller space for toggle icon */
+    font-size: 13px;           /* smaller font */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.toggle-password img {
+    width: 16px;               /* smaller icon */
+    height: 16px;
+}
+
+.login-border.footer {
+    background-color: #0f4d11;
+    color: #ffffff;
+    text-align: center;
+    padding: 2px 0;            /* very small padding */
+    font-size: 2px;            /* extremely small font */
+    font-family: Arial, Helvetica, sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    margin-top: 5px;           /* minimal margin */
+    box-sizing: border-box;
+    max-width: 400px;          /* same as form width */
+    border-radius: 0 0 4px 4px; /* tiny radius */
+}

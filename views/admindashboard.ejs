@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/navbar.css">
+<title>Admin Dashboard</title>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="brandname">
+    <div class="logo">
+      <img src="/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <h2>G'ray Countryside Cafe Est.2018</h2>
+  </div>
+
+  <div class="logout-container">
+    <a href="/logout"><button>Logout</button></a>
+  </div>
+</nav>
+
+<!-- STATS SECTION -->
+<section class="stats-container">
+  <div class="stat-card">
+    <h3>Total Stocks</h3>
+    <p><%= stats.totalStocks || 0 %></p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Total Products</h3>
+    <p><%= stats.totalProducts || 0 %></p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Total Orders</h3>
+    <p><%= stats.totalOrders || 0 %></p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
