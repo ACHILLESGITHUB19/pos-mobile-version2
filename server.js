@@ -1,6 +1,6 @@
 /* ================= IMPORTS ================= */
 import express from "express";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
